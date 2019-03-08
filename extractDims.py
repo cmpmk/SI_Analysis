@@ -1,10 +1,10 @@
 import pencil as pc
 
 # Load in objects:
-ff = pc.read_var(trimall=True, magic=['Vort'])
-dim = pc.read_dim()
-par = pc.read_param()
-grid = pc.read_grid()
+ff = pc.read_var(trimall=True, datadir='/media/cmp/Storage/SIMovie/data')
+dim = pc.read_dim(datadir='/media/cmp/Storage/SIMovie/data')
+par = pc.read_param(datadir='/media/cmp/Storage/SIMovie/data')
+grid = pc.read_grid(datadir='/media/cmp/Storage/SIMovie/data')
 
 # Parameters:
 cs0 = par.cs0
@@ -13,10 +13,8 @@ pg = par.density_power_law
 eps0 = par.eps_dtog # Dust to gas ratio
 
 # Grid variables:
-Lx = grid.Lx
-Ly = grid.Ly
-Lz = grid.Lz
 
-dx = grid.dx
-dy = grid.dy
-dz = grid.dz
+grids = {"Lx": grid.Lx, "Ly":grid.Ly, "Lz": grid.Lz,
+         "dx": grid.dx, "dy":grid.dy, "dz":grid.dx}
+
+print(grids)
