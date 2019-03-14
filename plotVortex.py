@@ -21,6 +21,7 @@ axs[0].contourf(r, phi, ffa.vort[2, int(nz),...]/vort_k, res)
 axs[1].contourf(r, phi, ffb.vort[2, int(nz),...]/vort_k, res)
 axs[2].contourf(r, phi, ffc.vort[2, int(nz),...]/vort_k, res)
 show()
+
 def VortMulti():
     ff15 = pc.read_var(trimall=True, ivar=15, magic=["vort"])
     ff18 = pc.read_var(trimall=True, ivar=18, magic=["vort"])

@@ -29,4 +29,3 @@ ax1.title('Title = %s', str(orbit))
 ax2.contourf(x, y, lg_rhop_xy20, res)
 ax2.title('Title = ', orbit)
 show()
-
