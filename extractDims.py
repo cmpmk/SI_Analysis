@@ -1,9 +1,9 @@
 import pencil as pc
 
-ivar = 21
+#ivar = 21
 datadir='/media/cmp/Storage/research/Streaming3D/data'
 # Load in objects:
-ff = pc.read_var(trimall=True, datadir=datadir, ivar=ivar)
+#ff = pc.read_var(trimall=True, datadir=datadir, ivar=ivar)
 dim = pc.read_dim(datadir=datadir)
 par = pc.read_param(datadir=datadir)
 grid = pc.read_grid(datadir=datadir)
