@@ -1,58 +1,36 @@
 import pencil as pc
 from pylab import *
 
-ffa = pc.read_var(trimall=True, ivar=2, magic=["vort"])
-ffb = pc.read_var(trimall=True, ivar=10, magic=["vort"])
-ffc = pc.read_var(trimall=True, ivar=21, magic=["vort"])
+ff = pc.read_var(trimall=True, ivar=21, magic=["vort"])
 
 #vortz_mid = ff1.vort[2, int(dim.nz/2),...]
 #print(vortz_mid.min(), vortz_mid.max())
 
-r, phi = meshgrid(ffa.x, ffa.y)
+r, phi = meshgrid(ff.x, ff.y)
 omega = 1./r**1.5
 vort_k = omega/2
 nz = 32/2
-vort_avg = mean(mean(ffa.vort, axis=0), axis=0)
-res = linspace(-2.5, 2.5, 256)
-
-# fig, axs = subplots(1,2)
-# axs[0].contourf(r, phi, vort_avg, res)
-# axs[1].contourf(r, phi, ffb.vort[2, int(nz),...]/vort_k, res)
-# show()
-
-def vort_avg(x):
-    return mean(mean(x, axis=0), axis=0)
+res = linspace(-1, 1, 256)
+vort_z = ff.vort[2,...]
+xlabel('x')
+ylabel('y')
+title('Vorticity at t = 21 Orbits')
+A = mean(vort_z, axis=0)
+print(A.min())
+print(A.max())
+p1 = contourf(r, phi, mean(vort_z,axis=0), res)
+colorbar(p1)
+show()
 
 def VortAvg():
-    r, phi = meshgrid(ffa.x, ffa.y)
+    r, phi = meshgrid(ff.x, ff.y)
     res = linspace(-1, 1, 256)
-    fig, axs = subplots(1,3)
+    fig, axs = subplots(1,1)
     fig.suptitle('Vorticity')
-    axs[0].contourf(r, phi, vort_avg(ffa.vort), res)
-    axs[1].contourf(r, phi, vort_avg(ffb.vort), res)
-    axs[2].contourf(r, phi, vort_avg(ffc.vort), res)
-    axs[0].set_title('t = 2 (orbits)')
-    axs[1].set_title('t = 10 (orbits)')
-    axs[2].set_title('t = 21 (orbits)')
+    contourf(r, phi, mean(vort_z,axis=0), res)
+    axs[0].set_title('t = 2')
     axs[0].set_xlabel('x')
-    axs[1].set_xlabel('x')
-    axs[2].set_xlabel('x')
     axs[0].set_ylabel('y')
-    axs[1].set_ylabel('y')
-    axs[2].set_ylabel('y')
     show()
-VortAvg()
+#VortAvg()
     
-def VortMulti():
-    ff15 = pc.read_var(trimall=True, ivar=15, magic=["vort"])
-    ff18 = pc.read_var(trimall=True, ivar=18, magic=["vort"])
-    ff20 = pc.read_var(trimall=True, ivar=21, magic=["vort"])
-
-    fig, axs = subplots(2, 3, sharex=True, sharey=True)
-    fig.suptitle('Vorticity')
-    axs[0,0].contourf(r, phi, ff1.vort[2, int(nz),...]/vort_k, res)
-    axs[0,1].contourf(r, phi, ff5.vort[2, int(nz),...]/vort_k, res)
-    axs[0,2].contourf(r, phi, ff10.vort[2, int(nz),...]/vort_k, res)
-    axs[1,0].contourf(r, phi, ff15.vort[2, int(nz),...]/vort_k, res)
-    axs[1,1].contourf(r, phi, ff18.vort[2, int(nz),...]/vort_k, res)
-    axs[1,2].contourf(r, phi, ff20.vort[2, int(nz),...]/vort_k, res)
