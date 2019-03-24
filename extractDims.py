@@ -13,7 +13,9 @@ phi = ff.y
 z = ff.z
 rhop = ff.rhop
 NP = ff.np
-    
+np_max = amax(NP)
+np_min = amin(NP)
+
 # Assign npar variable
 from pencil.files import pdim
 npar = pdim.read_pdim().npar
