@@ -58,3 +58,20 @@ def plot_mass():
     axs[1].set_ylim([y_loc-adj, y_loc+adj])
     show()
 plot_mass()
+
+# Determine the location of the n-largest masses in the disk
+#from pylab import *
+#import pencil as pc
+
+#n = 10  # Number of returns
+
+#ff = pc.read_var(trimall=True, ivar=21)
+#N = ff.np
+#N = N.flatten()
+#print(N[argsort(N)[-n:]])
+
+#x = ff.x; y = ff.y  
+#N = ff.np[16,...]
+#index = unravel_index(N[argsort(N)[-n:]])
+#print(index)
+#N.sort(); print(N)
