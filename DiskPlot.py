@@ -7,32 +7,24 @@ ny = 1024; nz = 32
 # Function to return variables for desired data file
 def Disk(ivar):
     ff = pc.read_var(trimall=True, ivar=ivar)
+    global r, x, y, z, rhop
     r = ff.x
     phi = ff.y
     z = ff.z
-    rhop = ff.rhop
-    lg_rhop_xy = log10(rhop[int(nz/2),...] + epsi)
+    rhop = ff.rhop;
     r2d, p2d = meshgrid(r, phi)
-    x = r2d*cos(p2d)
-    y = r2d*sin(p2d)
+    x = r2d*cos(p2d)           
+    y = r2d*sin(p2d)           
+    lg_rhop_xy = log10(rhop[int(nz/2),...] + epsi)
     res = linspace(lg_rhop_xy.max()-4, lg_rhop_xy.max(), 256)
-    return x, y, res, lg_rhop_xy
+    return res, lg_rhop_xy
 
-def diskxy_xz():
-    ff = pc.read_var(trimall=True, ivar=21)
-    r = ff.x
-    phi = ff.y
-    z = ff.z
-    rhop = ff.rhop
-    lg_rhop_xy = log10(rhop[int(nz/2),...] + epsi)
+def diskxy_xz(a):
+    resxy, lg_rhop_xy = Disk(a)
     lg_rhop_xz = log10(rhop[:,int(ny/2),:] + epsi)
-    r2d, p2d = meshgrid(r, phi)
-    x = r2d*cos(p2d)
-    y = r2d*sin(p2d)
-    resxy = linspace(lg_rhop_xy.max()-4, lg_rhop_xy.max(), 256)
     resxz = linspace(lg_rhop_xz.max()-4, lg_rhop_xz.max(), 256)
     fig, ax = subplots(1, 2)
-    fig.suptitle('Dust Density at t = 21 Orbits')
+    fig.suptitle('Dust Density at t = %s Orbits' % a)
     ax[0].contourf(x, y, lg_rhop_xy, resxy)
     ax[1].contourf(r, z, lg_rhop_xz, resxz)
     ax[0].set_xlim([x.min(), x.max()])
@@ -49,9 +41,9 @@ def diskxy_xz():
     show()
 
 def disk_plot_3(a, b, c):
-    x, y, res, lg_rhop_xya = Disk(a)
-    x, y, res, lg_rhop_xyb = Disk(b)
-    x, y, res, lg_rhop_xyc = Disk(c)
+    res, lg_rhop_xya = Disk(a)
+    res, lg_rhop_xyb = Disk(b)
+    res, lg_rhop_xyc = Disk(c)
     times = [a, b, c]
     rhops = [lg_rhop_xya, lg_rhop_xyb, lg_rhop_xyc]
     fig, axs = subplots(1, 3)
@@ -65,12 +57,12 @@ def disk_plot_3(a, b, c):
     show()
 
 def disk_plot_6(a, b, c, d, e, f):
-    x, y, res, rhopa = Disk(a)
-    x, y, res, rhopb = Disk(b)
-    x, y, res, rhopc = Disk(c)
-    x, y, res, rhopd = Disk(d)
-    x, y, res, rhope = Disk(e)
-    x, y, res, rhopf = Disk(f)
+    res, rhopa = Disk(a)
+    res, rhopb = Disk(b)
+    res, rhopc = Disk(c)
+    res, rhopd = Disk(d)
+    res, rhope = Disk(e)
+    res, rhopf = Disk(f)
     times = [a, b, c, d, e, f]
     rhops = [rhopa, rhopb, rhopc, rhopd, rhope, rhopf]
     fig, axs = subplots(2, 3)
@@ -81,6 +73,6 @@ def disk_plot_6(a, b, c, d, e, f):
         axs[1,i].set_title('t = %s' % times[i+3])
 #    axs[0,0].colorbar()
     show()
-#diskxy_xz()
+#diskxy_xz(21)
 disk_plot_3(5, 12, 20)
 #disk_plot_6(1, 3, 5, 8, 10, 21)
