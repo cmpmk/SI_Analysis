@@ -8,7 +8,7 @@ print('Dust, Gas Density Power Law = %s, %s' % ( pd, pg))
 r0 = 1.0   # (AU) Reference radius
 rho0 = 1.0 # Initial density
 sigma0 = rho0 * Lz
-
+#sigma0 = amax(rhop)
 # Expression to calculate mass of disk
 Mdisk = 4*pi*sigma0*(r0**(pd))*(sqrt(r_ext) - sqrt(r_int))
 
@@ -32,13 +32,6 @@ print('Mass of clump = ', "{:.2e}".format(Mclump))
 # index returns [31, 26, 160]
 # NP[31, 26, 160] = 2053, so this is the correct location
 
-##### To do:
-"""
-Calculate mass of clump []
-Return the coordinates of the largest clump [x]
-Plot the most massive clump using the coordinates [x]
-"""
-
 #### Return coordinates of most massive clump:
 x = ff.x; y = ff.y
 N = ff.np[int(nz/2),...]
@@ -60,8 +53,6 @@ def plot_mass():
 plot_mass()
 
 # Determine the location of the n-largest masses in the disk
-#from pylab import *
-#import pencil as pc
 
 #n = 10  # Number of returns
 
