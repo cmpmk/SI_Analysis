@@ -1,13 +1,16 @@
 import pencil as pc
 from pylab import *
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("datafile", type=int, help='Input var file')
+var = parser.parse_args().datafile
 
 # Assign datadir to the path of your data directory
-#datadir='/media/cmp/Storage/research/Streaming3D/data'
 datadir='./data'
-ivar = 21
 
 # Data variables:
-ff = pc.read_var(trimall=True, datadir=datadir, ivar=ivar)
+ff = pc.read_var(trimall=True, datadir=datadir, ivar=var)
 r = ff.x
 phi = ff.y
 z = ff.z
