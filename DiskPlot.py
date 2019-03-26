@@ -3,9 +3,8 @@ from pylab import *
 style.use('dark_background')
 
 epsi = 1e-4
-ny = 1024
-nz = 32
-# Function to return variables for a specific data file
+ny = 1024; nz = 32
+# Function to return variables for desired data file
 def Disk(ivar):
     ff = pc.read_var(trimall=True, ivar=ivar)
     r = ff.x
@@ -17,8 +16,7 @@ def Disk(ivar):
     x = r2d*cos(p2d)
     y = r2d*sin(p2d)
     res = linspace(lg_rhop_xy.max()-4, lg_rhop_xy.max(), 256)
-    t = str(round(ff.t/(2*pi),2))
-    return x, y, res, lg_rhop_xy, t
+    return x, y, res, lg_rhop_xy
 
 def diskxy_xz():
     ff = pc.read_var(trimall=True, ivar=21)
@@ -50,32 +48,30 @@ def diskxy_xz():
     ax[1].set_ylabel('z')
     show()
 
-#diskxy_xz()
-
 def disk_plot_3(a, b, c):
-    x, y, res, lg_rhop_xya, ta = Disk(a)
-    x, y, res, lg_rhop_xyb, tb = Disk(b)
-    x, y, res, lg_rhop_xyc, tc = Disk(c)
-    times = [ta, tb, tc]
+    x, y, res, lg_rhop_xya = Disk(a)
+    x, y, res, lg_rhop_xyb = Disk(b)
+    x, y, res, lg_rhop_xyc = Disk(c)
+    times = [a, b, c]
     rhops = [lg_rhop_xya, lg_rhop_xyb, lg_rhop_xyc]
     fig, axs = subplots(1, 3)
     fig.suptitle('Dust Density')
     for i in range(len(axs)):
-        axs[i].contourf(x, y, rhops[i], res)
+        p1=axs[i].contourf(x, y, rhops[i], res)
         axs[i].set_xlabel('x')
         axs[i].set_ylabel('y')
         axs[i].set_title('t = %s' % times[i])
+    cbar = fig.colorbar(p1, ax=axs, orientation='horizontal')
     show()
-#   cbar = fig.colorbar(p1, ax=axs, orientation='horizontal')
-#disk_plot_3(5, 12, 20)
+
 def disk_plot_6(a, b, c, d, e, f):
-    x, y, res, rhopa, ta = Disk(a)
-    x, y, res, rhopb, tb = Disk(b)
-    x, y, res, rhopc, tc = Disk(c)
-    x, y, res, rhopd, td = Disk(d)
-    x, y, res, rhope, te = Disk(e)
-    x, y, res, rhopf, tf = Disk(f)
-    times = [ta, tb, tc, td, te, tf]
+    x, y, res, rhopa = Disk(a)
+    x, y, res, rhopb = Disk(b)
+    x, y, res, rhopc = Disk(c)
+    x, y, res, rhopd = Disk(d)
+    x, y, res, rhope = Disk(e)
+    x, y, res, rhopf = Disk(f)
+    times = [a, b, c, d, e, f]
     rhops = [rhopa, rhopb, rhopc, rhopd, rhope, rhopf]
     fig, axs = subplots(2, 3)
     for i in range(len(axs)+1):
@@ -83,6 +79,8 @@ def disk_plot_6(a, b, c, d, e, f):
         axs[1,i].contourf(x, y, rhops[i+3], res)
         axs[0,i].set_title('t = %s' % times[i])
         axs[1,i].set_title('t = %s' % times[i+3])
+#    axs[0,0].colorbar()
     show()
-#   axs[0,0].colorbar()
-disk_plot_6(1, 3, 5, 8, 10, 21)
+#diskxy_xz()
+disk_plot_3(5, 12, 20)
+#disk_plot_6(1, 3, 5, 8, 10, 21)
