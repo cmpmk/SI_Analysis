@@ -18,9 +18,7 @@ if (eps0 == 1.0):
     Mdust = Mgas
 
 Mp = Mdust/npar
-
 Mclump = amax(NP)*Mp
-
 sigma = sigma0 * (Lx/r0)**(-pd) #r0 = 5 
 
 print('Mass of disk: ', round(Mdisk, 3))
@@ -34,21 +32,38 @@ print('Mass of clump = ', "{:.2e}".format(Mclump))
 
 #### Return coordinates of most massive clump:
 x = ff.x; y = ff.y
-N = ff.np[int(nz/2),...]
+N = ff.np[int(nz/2),...] 
+#N = ff.np[31,...]  # 0.86, -2.979
 index = unravel_index(argmax(N, axis=None), N.shape)
-x_loc = x[index[1]]
-y_loc = y[index[0]]
+x_loc = x[index[1]] #0.852
+y_loc = y[index[0]] #-2.936
+#x_loc = 0.843782
+#y_loc = -0.23623
 print('Largest value found: ', (N[index]))
 print('x, y coordinates %s, %s' % (round(x_loc, 3),round(y_loc, 3)))
 
+#def multi_mass():
+
+#fig, axs = subplots(1, 1)
+#adj = 0.02
+#axs.contourf(x, y, N, 256)
+#axs.set_xlim([x_loc-adj, x_loc+adj])
+#axs.set_ylim([y_loc-adj, y_loc+adj])
+#axs.set_xlabel('r')
+#axs.set_ylabel('phi')
+#show()    
 def plot_mass():
     fig, axs = subplots(1, 2)
+    fig.suptitle('Largest Located Clump 10^20 - 10^22 kg')
     P1 = axs[0].contourf(ff.x, ff.y, ff.np[int(nz/2),...], 256)
     cbar = colorbar(P1, orientation='horizontal')
-    adj = 0.01
+    adj = 0.03
     axs[1].contourf(x, y, N, 256)
     axs[1].set_xlim([x_loc-adj, x_loc+adj])
     axs[1].set_ylim([y_loc-adj, y_loc+adj])
+    for i in range(len(axs)):
+        axs[i].set_xlabel('r')
+        axs[i].set_ylabel(r'$\phi$')
     show()
 plot_mass()
 
@@ -57,10 +72,10 @@ plot_mass()
 #n = 10  # Number of returns
 
 #ff = pc.read_var(trimall=True, ivar=21)
-#N = ff.np
-#N = N.flatten()
+#N = ff.np[16,...]
+#M = M.flatten()
 #print(N[argsort(N)[-n:]])
-
+#y, x = where(N==M[i])
 #x = ff.x; y = ff.y  
 #N = ff.np[16,...]
 #index = unravel_index(N[argsort(N)[-n:]])
