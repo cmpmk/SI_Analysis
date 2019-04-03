@@ -37,11 +37,11 @@ def diskxy_xz(a):
         ax[i].set_xlabel('x')
         ax[i].set_aspect('equal')
     show()
-# Return a 1x3 dust density contour at each orbit
-def disk_plot_3(a, b, c):
-    times = [a, b, c]
-    rhops = [Disk(i) for i in times]
-    fig, axs = subplots(1, 3)
+# Return 1xn subplots of dust density contour at each orbit
+def disk_plot(*args):
+    times = [*args]
+    rhops = [Disk(t) for t in times]
+    fig, axs = subplots(1, len(args))
     fig.suptitle(r'Dust Density: $\log_{10}(\rho_{p})$')
     for i in range(len(axs)):
         axs[i].contourf(x, y, rhops[i], res)
@@ -49,20 +49,8 @@ def disk_plot_3(a, b, c):
         axs[i].set_xlabel('x')
         axs[i].set_ylabel('y')
         axs[i].set_title('t = %s' % times[i])
-    #cbar = fig.colorbar(p1, ax=axs, orientation='horizontal')
-    show()
-# Return a 1x3 dust density contour at each orbit
-def disk_plot_6(a, b, c, d, e, f):
-    times = [a, b, c, d, e, f]
-    rhops = [Disk(t) for t in times]
-    fig, axs = subplots(2, 3)
-    for i in range(len(axs)+1):
-        axs[0,i].set_facecolor('black')
-        axs[1,i].set_facecolor('black')
-        axs[0,i].contourf(x, y, rhops[i], res)
-        axs[1,i].contourf(x, y, rhops[i+3], res)
-        axs[0,i].set_title('t = %s' % times[i])
-        axs[1,i].set_title('t = %s' % times[i+3])
+        axs[i].set_aspect('equal')
+        #cbar = fig.colorbar(p1, ax=axs, orientation='horizontal')
     show()
 # Vorticity plot
 def vort_plot(ivar):
@@ -81,9 +69,16 @@ def vort_plot(ivar):
     for i in range(len(ax)):
         ax[i].set_xlabel('r')
         ax[i].set_ylabel(r'$\phi$')
-    show()
-                
-vort_plot(21)    
+    show() #84
+disk_plot(2, 3, 4, 5)
+#vort_plot(21)    
 #diskxy_xz(21)
 #disk_plot_3(2, 15, 21) #30.5, 29.9, 30.5
 #disk_plot_6(2, 3, 8, 12, 15, 21) #87
+
+
+#        fig, axs = subplots(2, 3)
+#        for i, row in enumerate(axs):
+#            for j, ax in enumerate(row):
+#                axs[i,j].set_facecolor('black')
+#                axs[i,j].contourf(x, y, rhops[i,j], res)
