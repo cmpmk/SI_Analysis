@@ -7,14 +7,34 @@ ny = 1024; nz = 32
 # Function to return variables for desired data file
 def Disk(ivar):
     ff = pc.read_var(trimall=True, ivar=ivar, quiet=True)
-    global  x, y, rhop, res
+    global  x, y, rhop, res, mrhop
     r2d, p2d = meshgrid(ff.x, ff.y) # r, phi
     x = r2d*cos(p2d)
     y = r2d*sin(p2d)
     rhop = ff.rhop
     lg_rhop_xy = log10(rhop[int(nz/2),...] + epsi)
-    res = linspace(lg_rhop_xy.max()-4, lg_rhop_xy.max(), 256)
+    mrhop = lg_rhop_xy.max()
+    res = linspace(lg_rhop_xy.max()-3.5, lg_rhop_xy.max(), 256)
     return lg_rhop_xy
+
+# Return 1xn subplots of dust density contour at each orbit
+def disk_plot(*args):
+    times = [*args]
+    rhops = [Disk(t) for t in times]
+    fig, axs = subplots(1, len(args), figsize=(10,8))
+#    fig.suptitle(r'Dust Density: $\log_{10}(\rho_{p})$')
+    fig.suptitle('Dust Density Evolution')
+    for i in range(len(axs)):
+        p1 = axs[i].contourf(x, y, rhops[i], res)
+        axs[i].set_facecolor('black')
+        axs[i].set_xlabel('x')
+        axs[i].set_ylabel('y')
+        axs[i].set_title('t = %s' % times[i])
+    cbar = colorbar(p1, ax=axs, orientation='horizontal', shrink=0.9)
+    cbar_ticks = linspace(0, mrhop, num=5, endpoint=True)
+    cbar.set_ticks(cbar_ticks)
+    
+    show()
 
 # Plot xy and xz planes of the disk side by side
 def diskxy_xz(a):
@@ -37,21 +57,6 @@ def diskxy_xz(a):
         ax[i].set_xlabel('x')
         ax[i].set_aspect('equal')
     show()
-# Return 1xn subplots of dust density contour at each orbit
-def disk_plot(*args):
-    times = [*args]
-    rhops = [Disk(t) for t in times]
-    fig, axs = subplots(1, len(args))
-    fig.suptitle(r'Dust Density: $\log_{10}(\rho_{p})$')
-    for i in range(len(axs)):
-        axs[i].contourf(x, y, rhops[i], res)
-        axs[i].set_facecolor('black')
-        axs[i].set_xlabel('x')
-        axs[i].set_ylabel('y')
-        axs[i].set_title('t = %s' % times[i])
-        axs[i].set_aspect('equal')
-        #cbar = fig.colorbar(p1, ax=axs, orientation='horizontal')
-    show()
 # Vorticity plot
 def vort_plot(ivar):
     ff = pc.read_var(trimall=True, ivar=ivar, magic=["vort"])
@@ -70,15 +75,6 @@ def vort_plot(ivar):
         ax[i].set_xlabel('r')
         ax[i].set_ylabel(r'$\phi$')
     show() #84
-disk_plot(2, 3, 4, 5)
+disk_plot(5, 15, 21)
 #vort_plot(21)    
 #diskxy_xz(21)
-#disk_plot_3(2, 15, 21) #30.5, 29.9, 30.5
-#disk_plot_6(2, 3, 8, 12, 15, 21) #87
-
-
-#        fig, axs = subplots(2, 3)
-#        for i, row in enumerate(axs):
-#            for j, ax in enumerate(row):
-#                axs[i,j].set_facecolor('black')
-#                axs[i,j].contourf(x, y, rhops[i,j], res)
