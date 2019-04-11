@@ -14,14 +14,26 @@ resp = linspace(rhop.max()-4, rhop.max(), 256)
 resg = linspace(rho.min(), rho.max(), 256)
 dtog = rhop/rho
 rese = linspace(-1, 1, 256)
-fig, ax = subplots(1, 3, sharex=True, sharey=True)
-ax[0].contourf(r, phi, rhop, resp)
-ax[1].contourf(r, phi, rho, resg)
-ax[2].contourf(r, phi, dtog, rese)
-ax[0].set_title(r'$\rho_{p}$')
-ax[1].set_title(r'$\rho_{g}$')
-ax[2].set_title(r'$\rho_{p}/\rho_{g}$')
-for i in range(len(ax)):
-    ax[i].set_facecolor('black')
-fig.tight_layout()
+# fig, ax = subplots(1, 3, sharex=True, sharey=True)
+# ax[0].contourf(r, phi, rhop, resp)
+# ax[1].contourf(r, phi, rho, resg)
+# ax[2].contourf(r, phi, dtog, rese)
+# ax[0].set_title(r'$\rho_{p}$')
+# ax[1].set_title(r'$\rho_{g}$')
+# ax[2].set_title(r'$\rho_{p}/\rho_{g}$')
+# for i in range(len(ax)):
+#     ax[i].set_facecolor('black')
+# fig.tight_layout()
+# show()
+
+subplot(221, axisbg='black')
+contourf(r, phi, rhop, resp)
+xlabel('r'); ylabel(r'$\phi$')
+title(r'$\rho_{p}$')
+
+subplot(222)
+
+subplot(223)
+
+subplot(224)
 show()
