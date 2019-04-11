@@ -1,39 +1,50 @@
 from pylab import *
 import pencil as pc
 
-ff = pc.read_var(trimall=True, ivar=21, magic=["vort"])
+svar = load('saved/var21.npz')
 nz = 32
-r = ff.x
-phi = ff.y
-z = ff.z
+with load('saved/var21.npz') as svar:
+    r = svar['r']
+    phi = svar['phi']
+    z = svar['z']
+    rhop = svar['rhop']
+    rho = svar['rho']
+    vort = svar['vort']
+    
+rhop = log10(rhop[int(nz/2),...] + 1e-4)
+rho = log10(rho[int(nz/2),...] + 1e-4)
+dtog = rhop/rho
+vort_z = vort[2,...]
 
-rhop = log10(ff.rhop[int(nz/2),...] + 1e-4)
-rho = log10(ff.rho[int(nz/2),...] + 1e-4)
-vort_z = ff.vort[2,...]
 resp = linspace(rhop.max()-4, rhop.max(), 256)
 resg = linspace(rho.min(), rho.max(), 256)
-dtog = rhop/rho
 rese = linspace(-1, 1, 256)
-# fig, ax = subplots(1, 3, sharex=True, sharey=True)
-# ax[0].contourf(r, phi, rhop, resp)
-# ax[1].contourf(r, phi, rho, resg)
-# ax[2].contourf(r, phi, dtog, rese)
-# ax[0].set_title(r'$\rho_{p}$')
-# ax[1].set_title(r'$\rho_{g}$')
-# ax[2].set_title(r'$\rho_{p}/\rho_{g}$')
-# for i in range(len(ax)):
-#     ax[i].set_facecolor('black')
-# fig.tight_layout()
-# show()
 
-subplot(221, axisbg='black')
-contourf(r, phi, rhop, resp)
-xlabel('r'); ylabel(r'$\phi$')
-title(r'$\rho_{p}$')
+fig, ax = subplots(nrows=2, ncols=2)
+# Dust density
+ax[0,0].set_facecolor('black')
+ax[0,0].set_xlabel('r'); ax[0,0].set_ylabel(r'$\phi$')
+ax[0,0].set_title(r'$\rho_{p}$')
+A1 = ax[0,0].contourf(r, phi, rhop, resp)
+cbar = colorbar(A1, ax=ax[0,0], orientation='vertical')
+cbar.set_ticks(linspace(0, amax(rhop), num=5))
 
-subplot(222)
+# Gas density
+ax[0,1].set_facecolor('black')
+ax[0,1].set_xlabel('r'); ax[0,1].set_ylabel(r'$\phi$')
+ax[0,1].set_title(r'$\rho_{g}$')
+A2 = ax[0,1].contourf(r, phi, rho, resg)
 
-subplot(223)
+# Dust to Gas ratio density
+ax[1,0].set_facecolor('black')
+ax[1,0].set_xlabel('r'); ax[1,0].set_ylabel(r'$\phi$')
+ax[1,0].set_title(r'$\rho_{p}/\rho_{g}$')
+A3 = ax[1,0].contourf(r, phi, dtog, rese)
 
-subplot(224)
+# Vorticity
+ax[1,1].set_facecolor('black')
+ax[1,1].set_xlabel('r'); ax[1,1].set_ylabel(r'$\phi$')
+ax[1,1].set_title('Vorticity')
+A4 = ax[1,1].contourf(r, phi, mean(vort_z, axis=0), rese)
+
 show()
