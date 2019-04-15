@@ -54,7 +54,6 @@ print('Mass of clump (ceres)=', "{:.2e}".format(Mclump/Mceres))
 #### Return coordinates of most massive clump:
 x = ff.x; y = ff.y
 N = ff.np[int(nz/2),...] 
-#N = ff.np[31,...]  # 0.86, -2.979
 index = unravel_index(argmax(N, axis=None), N.shape)
 x_loc = x[index[1]] #0.852
 y_loc = y[index[0]] #-2.936
@@ -62,20 +61,7 @@ y_loc = y[index[0]] #-2.936
 #y_loc = -0.23623
 print('Largest value found: ', (N[index]))
 print('x, y coordinates %s, %s' % (round(x_loc, 3),round(y_loc, 3)))
-
-
-# #fig, ax = subplots(1, 1)
-# fig.suptitle(r'Largest Located Clump ~$10^{22}g$')
-# p1 = ax.contourf(ff.x, ff.y, ff.np[int(nz/2),...], 256)
-# cbar = colorbar(p1, orientation='vertical')
-# adj = 0.03
-# #ax.contourf(x, y, N, 256)
-# ax.set_xlim([x_loc-adj, x_loc+adj])
-# ax.set_ylim([y_loc-adj, y_loc+adj])
-# ax.set_xlabel('r')
-# ax.set_ylabel(r'$\phi$')
-# show()
-#     
+     
 # def plot_mass():
 #     fig, axs = subplots(1, 2)
 #     fig.suptitle('Largest Located Clump 10^20 - 10^22 kg')
