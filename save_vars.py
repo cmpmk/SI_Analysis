@@ -19,7 +19,7 @@ datadir='./data'
 # Assing data to object
 ff = pc.read_var(trimall=True, datadir=datadir, ivar=var, magic=["vort"])
 fname = ('var%02d' % var)
-fsave = np.savez(os.path.join(path_dir,fname), r=ff.x, phi=ff.y, z=ff.z, rhop=ff.rhop, rho=ff.rho, vort=ff.vort)
+fsave = np.savez_compressed(os.path.join(path_dir,fname), r=ff.x, phi=ff.y, z=ff.z, rhop=ff.rhop, rho=ff.rho, vort=ff.vort, NP=ff.np)
 
 
 
