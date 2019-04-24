@@ -24,23 +24,25 @@ np_min = amin(NP)
 # Assign npar variable
 npar = cnst['npar']
 
+# Assign grid resolution variables
 nx = cnst['nx']
 ny = cnst['ny']
 nz = cnst['nz']
-
-# Parameters:
-cs0 = cnst['cs0']
-pd = cnst['pd']
-pg = cnst['pg']
-eps0 = cnst['eps0']
 
 # Grid variables:
 Lx = cnst['Lx']
 Ly = cnst['Ly']
 Lz = cnst['Lz']
 
+# Radial Boundaries
 r_int = cnst['r_int']
 r_ext = cnst['r_ext']
+
+# Parameters:
+cs0 = cnst['cs0']
+pd = cnst['pd']
+pg = cnst['pg']
+eps0 = cnst['eps0']
 
 
 ######################################################
@@ -54,4 +56,3 @@ r_ext = cnst['r_ext']
 # ff21 = ff[2]
 # AA = amax(ff21.np)
 # A = amax(ff[2].np)
-
