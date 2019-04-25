@@ -59,6 +59,7 @@ y_loc = phi[index[0]]
 
 print('Largest value found: ', (N[index]))
 print('x, y coordinates %s, %s' % (round(x_loc, 3),round(y_loc, 3)))
+
 end = time.time()
 print('Time taken = ', round(end-start, 3))
 
@@ -76,18 +77,6 @@ def plot_mass():
         axs[i].set_ylabel(r'$\phi$')
     show()
     
-# Determine the location of the n-largest masses in the disk
-
-#n = 10  # Number of returns
-
-#ff = pc.read_var(trimall=True, ivar=21)
-#N = ff.np[16,...]
-#M = N.flatten()
-#index = unravel_index(N[argsort(N)[-n:]])
-#print(index)
-#y, x = where(N==M[i])
-#x = ff.x; y = ff.y  
-
 ###########################
 # allclumps
 ###########################
@@ -125,43 +114,43 @@ def allClumps():
         contourf(r, phi, rp, 256)
         show()
 
-        def stack_nps():
-            N = []
-            for i in range(0, nz):
-                N = ff.np[i,...]
-            contourf(r, phi, N, 256)
-            M = N.flatten()
-            n = 10 # Number of values to return
-            M = (M[argsort(M)[-n::]])
-            print(M)
-            X = array([])
-            Y = array([])
-            for i in M:
-                y, x = where(N==i)
-                X = append(X,r[x])
-                Y = append(Y,phi[y])
-            print('X = ', X)
-            print('Y = ', Y)
-            print(X[0], Y[0])
+    def stack_nps():
+        N = []
+        for i in range(0, nz):
+            N = ff.np[i,...]
+        contourf(r, phi, N, 256)
+        M = N.flatten()
+        n = 10 # Number of values to return
+        M = (N.flatten()[argsort(N.flatten())[-n::]])
+        print(M)
+        X = array([])
+        Y = array([])
+        for i in M:
+            y, x = where(N==i)
+            X = append(X,r[x])
+            Y = append(Y,phi[y])
+        print('X = ', X)
+        print('Y = ', Y)
+        print(X[0], Y[0])
 
-            N = []
-            for i in range(0, nz):
-                N = ff.np[i,...]
+        N = []
+        for i in range(0, nz):
+            N = ff.np[i,...]
 
-            MM = where(N==N.max())
-            print(N.shape)
-            print(MM)
-            lg_N = log10(N + epsi)
-            res = linspace(amax(lg_N)-4, amax(lg_N), 256)
-            fig, ax = subplots(1, 1)
-            a = ax.contourf(r, phi, lg_N, res)
-            ax.set_facecolor('black')
-            cbar = colorbar(a,ax=ax, orientation='vertical')
-            cbar_ticks = ["{:0.2f}".format(i) for i in linspace(amin(N),amax(N), 9)]
-            cbar.ax.set_yticklabels(cbar_ticks)
-            show()
+        MM = where(N==N.max())
+        print(N.shape)
+        print(MM)
+        lg_N = log10(N + epsi)
+        res = linspace(amax(lg_N)-4, amax(lg_N), 256)
+        fig, ax = subplots(1, 1)
+        a = ax.contourf(r, phi, lg_N, res)
+        ax.set_facecolor('black')
+        cbar = colorbar(a, ax=ax, orientation='vertical')
+        cbar_ticks = ["{:0.2f}".format(i) for i in linspace(amin(N),amax(N), 9)]
+        cbar.ax.set_yticklabels(cbar_ticks)
+        show()
 
-            lg_Nz = log10(ff.np[:,int(ny/2),:] + epsi)
-            contourf(r, z, lg_Nz, res)
-            show()
+        lg_Nz = log10(ff.np[:,int(ny/2),:] + epsi)
+        contourf(r, z, lg_Nz, res)
+        show()
 # 173            
