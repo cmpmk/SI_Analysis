@@ -1,9 +1,4 @@
-###########################
 # clumpMass
-###########################
-
-import time
-start = time.time()
 from extractDims import *
 
 print('np_min, np_max = %s, %s' % (np_min, np_max))
@@ -15,7 +10,6 @@ print('Dust, Gas Density Power Law = %s, %s' % ( pd, pg))
 #
 # Sigma = 1500 (r/AU)**(-1.5) g/cm3
 # T = 280/sqrt(r/AU) K
-#
     
 sigma0 = 1500.
 # T0 = 280.
@@ -48,7 +42,6 @@ Mclump = np_max*Mp
 print('Mass of disk: ', round(Mdisk, 3))
 print('Mp = ', "{:2e}".format(Mp))
 print('Mass of clump = ', "{:.2e}".format(Mclump))
-Mceres = 8.958e23
 print('Mass of clump (ceres)=', "{:.2e}".format(Mclump/Mceres))
 
 #### Return coordinates of most massive clump:
@@ -59,9 +52,6 @@ y_loc = phi[index[0]]
 
 print('Largest value found: ', (N[index]))
 print('x, y coordinates %s, %s' % (round(x_loc, 3),round(y_loc, 3)))
-
-end = time.time()
-print('Time taken = ', round(end-start, 3))
 
 def plot_mass():
     adj = 0.03
@@ -76,81 +66,35 @@ def plot_mass():
         axs[i].set_xlabel('r')
         axs[i].set_ylabel(r'$\phi$')
     show()
+
     
-###########################
-# allclumps
-###########################
+########## allclumps ##########
 def allClumps():
     import pencil as pc
 
-    #### Return coordinates of most massive clump:
+    ### Return coordinates of most massive clump:
     ff = pc.read_var(trimall=True, ivar = 21)
     epsi = 1e-4
     # Determine the location of the n-largest masses in the disk
     #[ 987. 1001. 1053. 1054. 1088. 1098. 1134. 1374. 1865. 2053.]
 
-    r = ff.x
-    phi = ff.y
-    z = ff.z
-    N = ff.np#[16,...]
+    r, phi, z = ff.x, ff.y, ff.z
+    N = ff.np
     MM = where(N==N.max())
     print(MM)
-    ix=MM[2]
-    iy=MM[1]
-    iz=MM[0]
+    ix, iy, iz = MM[2], MM[1], MM[0]
     
-    #print(N[31, 26, 160])
-
     def return_coors(X, Y, Z):
         print(r[X], phi[Y], z[Z])
         
     return_coors(ix, iy, iz)
 
     def stack_rhops():
-        rp = []
+        rp = zeros((1024, 384))
         for i in arange(0, nz):
-            rp = ff.rhop[i,...]
-        print(amax(rp))
+            rp += ff.rhop[i,...]
         contourf(r, phi, rp, 256)
         show()
-
-    def stack_nps():
-        N = []
-        for i in range(0, nz):
-            N = ff.np[i,...]
-        contourf(r, phi, N, 256)
-        M = N.flatten()
-        n = 10 # Number of values to return
-        M = (N.flatten()[argsort(N.flatten())[-n::]])
-        print(M)
-        X = array([])
-        Y = array([])
-        for i in M:
-            y, x = where(N==i)
-            X = append(X,r[x])
-            Y = append(Y,phi[y])
-        print('X = ', X)
-        print('Y = ', Y)
-        print(X[0], Y[0])
-
-        N = []
-        for i in range(0, nz):
-            N = ff.np[i,...]
-
-        MM = where(N==N.max())
-        print(N.shape)
-        print(MM)
-        lg_N = log10(N + epsi)
-        res = linspace(amax(lg_N)-4, amax(lg_N), 256)
-        fig, ax = subplots(1, 1)
-        a = ax.contourf(r, phi, lg_N, res)
-        ax.set_facecolor('black')
-        cbar = colorbar(a, ax=ax, orientation='vertical')
-        cbar_ticks = ["{:0.2f}".format(i) for i in linspace(amin(N),amax(N), 9)]
-        cbar.ax.set_yticklabels(cbar_ticks)
-        show()
-
-        lg_Nz = log10(ff.np[:,int(ny/2),:] + epsi)
-        contourf(r, z, lg_Nz, res)
-        show()
+    stack_rhops()
+allClumps()
 # 173            
