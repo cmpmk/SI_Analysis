@@ -44,6 +44,8 @@ pd = cnst['pd']
 pg = cnst['pg']
 eps0 = cnst['eps0']
 
+# Misc:
+Mceres = 8.958e23
 
 ######################################################
 # Assign multiple variables for each data file (experimental):
