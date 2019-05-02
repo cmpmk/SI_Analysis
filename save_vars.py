@@ -21,7 +21,6 @@ ff = pc.read_var(trimall=True, datadir=datadir, ivar=var, magic=["vort"])
 fname = ('var%02d' % var)
 fsave = np.savez_compressed(os.path.join(path_dir,fname), r=ff.x, phi=ff.y, z=ff.z, rhop=ff.rhop, rho=ff.rho, vort=ff.vort, NP=ff.np)
 
-
 def constants():
     from pencil.files import pdim
     npar = pdim.read_pdim().npar
@@ -48,7 +47,9 @@ def constants():
     r_ext = round(np.amax(grid.read_grid().x), 1)
 
     fname = 'constants'
-    fsave = np.savez_compressed(os.path.join(path_dir,fname), r=ff.x, phi=ff.y, z=ff.z, npar=npar,
+    fsave = np.savez_compressed(os.path.join(path_dir,fname), npar=npar,
                                 nx=nx, ny=ny, nz=nz, cs0=cs0, pd=pd, pg=pg, eps0=eps0,
                                 Lx = Lx, Ly = Ly, Lz = Lz, r_int = r_int, r_ext = r_ext)
+    xyzname = 'xyz'
+    fsave = np.savez_compressed(os.path.join(path_dir, xyzname), r=ff.x, phi=ff.y, z=ff.z)
 #constants()
