@@ -3,7 +3,7 @@ import pencil as pc
 
 svar = load('saved/var21.npz')
 mnz = int(32/2)
-#with load('saved/var21.npz') as svar:
+
 r = svar['r']
 phi = svar['phi']
 z = svar['z']
@@ -28,7 +28,7 @@ resg = linspace(lg_rho.min(), lg_rho.max(), 256)
 rese = linspace(-1, 1, 256)
 
 nrows = 2; ncols = 2
-fig, ax = subplots(nrows=2, ncols=2)
+fig, ax = subplots(nrows=nrows, ncols=ncols)
 # Dust density
 ax[0,0].set_title(r'$\rho_{p}$')
 A1 = ax[0,0].contourf(r, phi, lg_rhop, resp)
@@ -62,6 +62,7 @@ ax11_ticks = ["{:0.2f}".format(i)
         for i in linspace(amin(vvv), amax(vvv), 9)]
 cbar.ax.set_yticklabels(ax11_ticks)
 
+# Assign facecolor and axis labels for all subplots
 for i in range(nrows):
     for j in range(ncols):
         ax[i,j].set_facecolor('black')
