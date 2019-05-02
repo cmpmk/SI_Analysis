@@ -48,7 +48,7 @@ def constants():
     r_ext = round(np.amax(grid.read_grid().x), 1)
 
     fname = 'constants'
-    fsave = np.savez_compressed(os.path.join(path_dir,fname), npar=npar,
+    fsave = np.savez_compressed(os.path.join(path_dir,fname), r=ff.x, phi=ff.y, z=ff.z, npar=npar,
                                 nx=nx, ny=ny, nz=nz, cs0=cs0, pd=pd, pg=pg, eps0=eps0,
                                 Lx = Lx, Ly = Ly, Lz = Lz, r_int = r_int, r_ext = r_ext)
 #constants()
