@@ -1,6 +1,8 @@
-# clumpMass
+### clumpMass ###
 from extractDims import *
+
 def clumpMass(npval):
+    from extractDims import r_ext, r_int
     # Minimum mass solar nebula
     # Sigma = 1500 (r/AU)**(-1.5) g/cm3
     # T = 280/sqrt(r/AU) K
@@ -31,22 +33,21 @@ def clumpMass(npval):
     print('Mass of clump (g) = ', "{:.2e}".format(Mclump))
     print('Mass of clump (ceres)=', "{:.2e}".format(Mclump/Mceres))
 
-
 Clump1 = clumpMass(2053)
 
-#### Return coordinates of most massive clump:
-N = NP[int(nz/2),...] 
-index = unravel_index(argmax(N, axis=None), N.shape)
-x_loc = r[index[1]] 
-y_loc = phi[index[0]] 
-
 def plot_mass():
-    adj = 0.03
+    #### Return coordinates of most massive clump:
+    N = NP[int(nz/2),...] 
+    index = unravel_index(argmax(N, axis=None), N.shape)  # Get the largest value from the ff.np array
+    x_loc = r[index[1]]   # Grab the x value from the index
+    y_loc = phi[index[0]] # Grab the y value from the index
+    adj = 0.03 # Used to limit axes to mimic zooming into the mass
+
     fig, axs = subplots(1, 2)
-    fig.suptitle('Largest Located Clump 10^20 - 10^22 kg')
-    P1 = axs[0].contourf(r, phi, NP[int(nz/2),...], 256)
+    fig.suptitle('Largest Located Clump')
+    P1 = axs[0].contourf(r, phi, NP[int(nz/2),...], 256) # Plot the entire region 
     cbar = colorbar(P1, orientation='horizontal')
-    axs[1].contourf(r, phi, N, 256)
+    axs[1].contourf(r, phi, N, 256)                      # Plot the mass        
     axs[1].set_xlim([x_loc-adj, x_loc+adj])
     axs[1].set_ylim([y_loc-adj, y_loc+adj])
     for i in range(len(axs)):
