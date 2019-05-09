@@ -1,7 +1,5 @@
 ########## allclumps ##########
 ## Full disk clump analysis ##
-import time
-start = time.time()
 from pylab import *
 
 consts = load('saved/constants.npz')
@@ -14,7 +12,7 @@ nx, ny, nz = consts['nx'], consts['ny'], consts['nz'] # Load grid resolution
 npar = consts['npar'] # Load number of particles
 
 np = dat['NP']        # Load particle density (np) vals
-
+rhop = dat['rhop']    # Load particle density
 
 # Stack all the np levels
 def stack_nps():
@@ -23,8 +21,15 @@ def stack_nps():
         nofp += np[i,...]
     return nofp
 
+# Stack all the rhop levels
+def stack_rhops():
+    nrhop = zeros((ny, nx))
+    for i in arange(0, nz):
+        nrhop += rhop[i,...]
+    return nrhop
+
+nrhop = stack_rhops()
 nofp = stack_nps()
-print(amax(nofp))
 
 def largest_locs(Array, n):
     flat = Array.flatten()
@@ -32,23 +37,12 @@ def largest_locs(Array, n):
     indices = indices[argsort(-flat[indices])]
     return unravel_index(indices, Array.shape)
 
-cl_np = asarray(largest_locs(nofp, 10)) # assign the return as an array
+cl_np = asarray(largest_locs(nofp, 10)) # assign the ff.np return as an array
+cl_rhop = asarray(largest_locs(nrhop, 10)) # assign the ff.rhop return as an array
 
-rloc = cl_np[1]
-ploc = cl_np[0]
+rloc = cl_np[1] # r-coordinates
+ploc = cl_np[0] # phi-coordinates
 
-# Compare the stacked and unstacked np values to reassure the difference
-def plot_compare():
-    r2d, p2d = meshgrid(r, phi)
-    x = r2d*cos(p2d)
-    y = r2d*sin(p2d)
-    fig, ax = subplots(1,2)
-    nofp10 = log10(nofp + 1e-4)
-    ax[0].contourf(x, y, nofp, 256)
-    ax[0].set_aspect('equal')
-    ax[1].contourf(x, y, np[16,...], 256)
-    ax[1].set_aspect('equal')
-    show()
 
 # Convert code units to physical units for clumps
 def clump_mass(npval):
@@ -81,19 +75,32 @@ def clump_mass(npval):
 
     return Mclump
 
-def plot_mass():
-    ### Return coordinates of most massive clump:
-    N = NP[]
-
-# Determine roche for clump
-def Roche_Limit(mass):
-    M = 1.989e33 # (g), solar mass
-    m = clump_mass(mass)
-    au_to_km = 1.496e8
-    R = 695.5e6 # m
-    d = R*(2*(M/m))**(1./3)
-    return d
+def Hill_Radius(Mclump):
+    M0 = 2000 # Solar mass in code units
+    R = 0.5 # Testing purposes
+    Rh = R*(Mclump/(3.* M0))**(1./3)
+    return Rh
 
 
-end = time.time()
-print('Time taken = ', round(end-start, 3))
+# Determine roche densities 
+def Roche_Limit(R):
+    M0 = 2000 # Solar mass in code units
+    rhor = (3/(2*pi))*(M0 / R**3)
+    return rhor
+
+rhor = Roche_Limit(r) # Create an array of roche densities for each point along the radius
+print(rhor)
+
+# Compare the stacked and unstacked np values to reassure the difference
+def plot_compare():
+    r2d, p2d = meshgrid(r, phi)
+    x = r2d*cos(p2d)
+    y = r2d*sin(p2d)
+    fig, ax = subplots(1,2)
+    nofp10 = log10(nofp + 1e-4)
+    ax[0].contourf(x, y, nofp, 256)
+    ax[0].set_aspect('equal')
+    ax[1].contourf(x, y, np[16,...], 256)
+    ax[1].set_aspect('equal')
+    show()
+
