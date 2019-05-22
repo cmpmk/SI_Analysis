@@ -55,9 +55,10 @@ cbar.ax.set_yticklabels(ax10_ticks)
 
 # Vorticity
 ax[1,1].set_title('Vorticity')
+vvv = mean(vort_z, axis=0)
+rese = linspace(amin(vvv), amax(vvv), 256)
 A4 = ax[1,1].contourf(r, phi, mean(vort_z, axis=0), rese)
 cbar = colorbar(A4, ax=ax[1,1], orientation='vertical')
-vvv = mean(vort_z, axis=0)
 ax11_ticks = ["{:0.2f}".format(i)
         for i in linspace(amin(vvv), amax(vvv), 9)]
 cbar.ax.set_yticklabels(ax11_ticks)
